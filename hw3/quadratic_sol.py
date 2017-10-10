@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Andy Lu
-SMU Mathematics 
+SMU Mathematics
 MATH 5315 Fall 2017
 
 prob3.py for Homework 3
@@ -10,21 +10,21 @@ polynomials to do the work. A choice of using the Newton form of interpolating
 was made because it is easier to recompute the values of the coefficients
 rather than constantly rebuild polynomials of degree 0 up to n. Helper
 functions have been written to improve source code readability.
-""" 
+"""
 
 # Imports
 
-#################################################################################
-#                             Function Definitions                              #
-#################################################################################
+##############################################################################
+#                            Function Definitions                            #
+##############################################################################
 
 def quadratic_sol(INPUTS):
     """
-    Usage: x, its = quadratic_sol( Inputs ) 
+    Usage: x, its = quadratic_sol( Inputs )
     Inputs:
-            Ffun    Nonlinear function name/handle 
+            Ffun    Nonlinear function name/handle
             x       Initial guess at solution
-            maxit   max allowed number of iterations   
+            maxit   max allowed number of iterations
             Srtol   relative solution tolerance
             Satol   absolute solution tolerance
             Rrtol   relative residual tolerance
@@ -38,10 +38,10 @@ def quadratic_sol(INPUTS):
     if bad input:
         set to a default value
         output warning to the screen
-    
-    # Initialize variables 
+
+    # Initialize variables
     x0 = x
-    # Set up the two other initial guesses 
+    # Set up the two other initial guesses
     if x0 equal 0:
         x1 = x + 1e-2
         x2 = x - 1e-2
@@ -49,19 +49,19 @@ def quadratic_sol(INPUTS):
         x1 = x(1 + 1e-2)
         x2 = x(1 - 1e-2)
     input arguments
-    
+
     LOOP: from 1 to maxit:
-        # Call utility functions to build a quadratic interpolating function 
+        # Call utility functions to build a quadratic interpolating function
         # clist will be [a, b, c] for ax^2 + bx + c
         clist = newtwoncoeff(Ffun, x0, x1, x2)
-        # Using a,b,c plug those into the quadratic question and return a root, and if 
-        # the root is imaginary
+        # Using a,b,c plug those into the quadratic question and return a
+        # root, and if the root is imaginary
         root, imag = quad_equation(clist)
-        
-        # if root is imaginary, print message and quit 
+
+        # if root is imaginary, print message and quit
         if (imag):
             print error message and quit
-    
+
         # Shift guesses x2 = root
         x1 = x2
         x0 = x1
@@ -71,35 +71,37 @@ def quadratic_sol(INPUTS):
 
 def quad_equation():
     """
-    Usage: root, imag = quad_equation(clist) 
+    Usage: root, imag = quad_equation(clist)
     Inputs:
-            clist   A list of coefficients in the order a,b,c for ax^2 +bx + c
+            clist   A list of coefficients in the order a,b,c for
+                      ax^2 + bx + c
     Outputs:
             root    Solution to the quadratic
             imag    Boolean describing if the root returned is imaginary
     """
-    root = -(clist[1]) + sqrt(c[1]^2 - 4*c[0]*c[2]) / 2*c[0] 
-    
+    root = -(clist[1]) + sqrt(c[1]^2 - 4*c[0]*c[2]) / 2*c[0]
+
     if (c[1]^2 - 4*c[0]*c[2] < 0):
-        return root and true     
+        return root and true
     else:
         return root and false
-        
+
 def newtoncoeff():
     """
-    Usage: clist = newtoncoeff(Ffun, x0, x1, x2) 
+    Usage: clist = newtoncoeff(Ffun, x0, x1, x2)
     Inputs:
             Ffun    Function handle
             x0      A point to interpolate
             x1      A point to interpolate
             x2      A point to interpolate
     Outputs:
-            clist   A list of the coefficients that describe the interpolating polynomial
+            clist   A list of the coefficients that describe the interpolating
+                      polynomial
     """
     # calculate divided differences
     # store in an array
-    arr[i] = Ffun(xi)                       # for i = 0, 1, ... 
-    arr[i] = arr[i] - arr[i-1] / xi - xi-1  # for i = 1, 2, ... 
+    arr[i] = Ffun(xi)                       # for i = 0, 1, ...
+    arr[i] = arr[i] - arr[i-1] / xi - xi-1  # for i = 1, 2, ...
     arr[i] = arr[i] - arr[i-1] / (xi - xi-1)(xi - xi-2) #for i = 2, 3, ...
 
     return arr
