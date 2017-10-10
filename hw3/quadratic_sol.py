@@ -18,7 +18,7 @@ functions have been written to improve source code readability.
 #                            Function Definitions                            #
 ##############################################################################
 
-def quadratic_sol(INPUTS):
+def quadratic_sol(Ffun, x, maxit, Srtol, Satol, Rrtol, Ratol, output):
     """
     Usage: x, its = quadratic_sol( Inputs )
     Inputs:
@@ -34,10 +34,28 @@ def quadratic_sol(INPUTS):
             x       Approximate solution
             its     Number of iterations used
     """
-    # Check EACH
-    if bad input:
-        set to a default value
-        output warning to the screen
+
+    # Check input arguments, reset values as needed
+    if (int(maxit) < 1):
+        print("quadratic_sol: maxit = %i < 1. Resetting to 100\n"
+              % (int(maxit)))
+        maxit = 100
+    if (Srtol < 1e-15):
+        print("quadratic_sol: Srtol = %g < %g. Resetting to %g\n"
+              % (Srtol, 1e-15, 1e-15))
+        Srtol = 1e-10
+    if (Satol < 0):
+        print("quadratic_sol: Satol = %g < 0. Resetting to %g\n"
+              % (Satol, 1e-15))
+        Satol = 1e-5
+    if (Rrtol < 1e-15):
+        print("quadratic_sol: Rrtol = %g < %g. Resetting to %g\n"
+              % (Rrtol, 1e-15, 1e-15))
+        Rrtol = 1e-10
+    if (Ratol < 0):
+        print("quadratic_sol: Ratol = %g < 0. Resetting to %g\n"
+              % (Ratol, 1e-15))
+        Ratol = 1e-5
 
     # Initialize variables
     x0 = x
