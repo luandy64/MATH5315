@@ -35,6 +35,9 @@ def quadratic_sol(Ffun, x, maxit, Srtol, Satol, Rrtol, Ratol, output):
             its     Number of iterations used
     """
 
+    # Imports
+    import numpy as np
+
     # Check input arguments, reset values as needed
     if (int(maxit) < 1):
         print("quadratic_sol: maxit = %i < 1. Resetting to 100\n"
@@ -59,16 +62,17 @@ def quadratic_sol(Ffun, x, maxit, Srtol, Satol, Rrtol, Ratol, output):
 
     # Initialize variables
     x0 = x
+    f0norm = np.linalg.norm(x0)
+
     # Set up the two other initial guesses
-    if x0 equal 0:
+    if (x0 == 0):
         x1 = x + 1e-2
         x2 = x - 1e-2
     else:
         x1 = x(1 + 1e-2)
         x2 = x(1 - 1e-2)
-    input arguments
 
-    LOOP: from 1 to maxit:
+    for it in range(1, maxit):
         # Call utility functions to build a quadratic interpolating function
         # clist will be [a, b, c] for ax^2 + bx + c
         clist = newtwoncoeff(Ffun, x0, x1, x2)
@@ -78,13 +82,19 @@ def quadratic_sol(Ffun, x, maxit, Srtol, Satol, Rrtol, Ratol, output):
 
         # if root is imaginary, print message and quit
         if (imag):
-            print error message and quit
+            print("quadratic_sol: Imaginary Root. Exiting")
+            exit()
 
-        # Shift guesses x2 = root
-        x1 = x2
-        x0 = x1
+        # Compute norms for convergence checking
+        hnorm = np.linalg.norm(abs(x0 - root))
+
+        # Shift guesses
+        x2 = x1
+        x1 = x0
+        x0 = root
+
         # Check for convergence
-        if (exit_condition_true):
+        if ((hnorm < Satol + Srtol*xnorm) or (fnorm < Ratol + Rrtol*f0norm)):
             break
 
 def quad_equation():
