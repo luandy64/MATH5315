@@ -78,12 +78,7 @@ def quadratic_sol(Ffun, x, maxit, Srtol, Satol, Rrtol, Ratol, output):
         clist = newtwoncoeff(Ffun, x0, x1, x2)
         # Using a,b,c plug those into the quadratic question and return a
         # root, and if the root is imaginary
-        root, imag = quad_equation(clist)
-
-        # if root is imaginary, print message and quit
-        if (imag):
-            print("quadratic_sol: Imaginary Root. Exiting")
-            exit()
+        root = quad_equation(clist, x0)
 
         # Compute norms for convergence checking
         hnorm = np.linalg.norm(abs(x0 - root))
@@ -97,22 +92,37 @@ def quadratic_sol(Ffun, x, maxit, Srtol, Satol, Rrtol, Ratol, output):
         if ((hnorm < Satol + Srtol*xnorm) or (fnorm < Ratol + Rrtol*f0norm)):
             break
 
-def quad_equation():
+def quad_equation(clist):
     """
-    Usage: root, imag = quad_equation(clist)
+    Usage: root = quad_equation(clist, x0)
     Inputs:
             clist   A list of coefficients in the order a,b,c for
                       ax^2 + bx + c
+            x0      The most recent iterate
     Outputs:
             root    Solution to the quadratic
-            imag    Boolean describing if the root returned is imaginary
     """
-    root = -(clist[1]) + sqrt(c[1]^2 - 4*c[0]*c[2]) / 2*c[0]
 
-    if (c[1]^2 - 4*c[0]*c[2] < 0):
-        return root and true
+    if (len(clist) != 3):
+        print("quad_equation: Improper Number of Arguments")
+        exit()
+
+    # Check if real roots can be found
+    if (c[1]^2 - 4*c[0]*c[2] <= 0):
+        # Compute two root using the standard quadratic formula
+        posRoot = -(clist[1]) + sqrt(c[1]^2 - 4*c[0]*c[2]) / 2*c[0]
+        negRoot = -(clist[1]) - sqrt(c[1]^2 - 4*c[0]*c[2]) / 2*c[0]
+
+        # Find the root closest to x0
+        if (abs(x0 - posRoot) < abs(x0 - negRoot)):
+            root = posRoot
+        else:
+            root = negRoot
+
+        return root
     else:
-        return root and false
+        print("quadratic_sol: Imaginary Roots. Exiting")
+        exit()
 
 def newtoncoeff():
     """
