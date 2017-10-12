@@ -13,6 +13,8 @@ functions have been written to improve source code readability.
 """
 
 # Imports
+import numpy as np
+from math import *
 
 ##############################################################################
 #                            Function Definitions                            #
@@ -34,9 +36,6 @@ def quadratic_sol(Ffun, x, maxit, Srtol, Satol, Rrtol, Ratol, output):
             x       Approximate solution
             its     Number of iterations used
     """
-
-    # Imports
-    import numpy as np
 
     # Check input arguments, reset values as needed
     if (int(maxit) < 1):
@@ -62,37 +61,47 @@ def quadratic_sol(Ffun, x, maxit, Srtol, Satol, Rrtol, Ratol, output):
 
     # Initialize variables
     x0 = x
-    f0norm = np.linalg.norm(x0)
+    f0norm = np.linalg.norm(Ffun(x0))
 
     # Set up the two other initial guesses
     if (x0 == 0):
         x1 = x + 1e-2
         x2 = x - 1e-2
     else:
-        x1 = x(1 + 1e-2)
-        x2 = x(1 - 1e-2)
+        x1 = x*(1 + 1e-2)
+        x2 = x*(1 - 1e-2)
 
     for it in range(1, maxit):
         # Call utility functions to build a quadratic interpolating function
         # clist will be [a, b, c] for ax^2 + bx + c
-        clist = newtwoncoeff(Ffun, x0, x1, x2)
+        clist = newtoncoeff(Ffun, x0, x1, x2)
         # Using a,b,c plug those into the quadratic question and return a
         # root, and if the root is imaginary
         root = quad_equation(clist, x0)
 
         # Compute norms for convergence checking
-        hnorm = np.linalg.norm(abs(x0 - root))
+        hnorm = np.linalg.norm(root - x0)
+        fnorm = np.linalg.norm(Ffun(root))
+        xnorm = np.linalg.norm(root)
 
         # Shift guesses
         x2 = x1
         x1 = x0
         x0 = root
 
+        # Check if convergence history is wanted
+        if (output):
+            print("   iter %3i, \t||h|| = %g, \thtol = %g,"
+                  % (it, hnorm, Satol+Srtol*xnorm), end='')
+            print(" \t||f|| = %g, \tftol = %g\n"
+                  % (fnorm, Ratol+Rrtol*f0norm), end='')
+
         # Check for convergence
         if ((hnorm < Satol + Srtol*xnorm) or (fnorm < Ratol + Rrtol*f0norm)):
             break
 
-def quad_equation(clist):
+    return  [x0, it]
+def quad_equation(clist, x0):
     """
     Usage: root = quad_equation(clist, x0)
     Inputs:
@@ -108,13 +117,13 @@ def quad_equation(clist):
         exit()
 
     # Check if real roots can be found
-    if (c[1]^2 - 4*c[0]*c[2] <= 0):
+    if ((pow(clist[1],2) - 4*clist[0]*clist[2]) >= 0):
         # Compute two root using the standard quadratic formula
-        posRoot = -(clist[1]) + sqrt(c[1]^2 - 4*c[0]*c[2]) / 2*c[0]
-        negRoot = -(clist[1]) - sqrt(c[1]^2 - 4*c[0]*c[2]) / 2*c[0]
+        posRoot = (-(clist[1]) + sqrt(pow(clist[1],2) - 4*clist[0]*clist[2])) / (2*clist[0])
+        negRoot = (-(clist[1]) - sqrt(pow(clist[1],2) - 4*clist[0]*clist[2])) / (2*clist[0])
 
         # Find the root closest to x0
-        if (abs(x0 - posRoot) < abs(x0 - negRoot)):
+        if (abs(posRoot - x0) < abs(negRoot - x0)):
             root = posRoot
         else:
             root = negRoot
@@ -124,7 +133,7 @@ def quad_equation(clist):
         print("quadratic_sol: Imaginary Roots. Exiting")
         exit()
 
-def newtoncoeff():
+def newtoncoeff(Ffun, x0, x1, x2):
     """
     Usage: clist = newtoncoeff(Ffun, x0, x1, x2)
     Inputs:
@@ -138,8 +147,14 @@ def newtoncoeff():
     """
     # calculate divided differences
     # store in an array
-    arr[i] = Ffun(xi)                       # for i = 0, 1, ...
-    arr[i] = arr[i] - arr[i-1] / xi - xi-1  # for i = 1, 2, ...
-    arr[i] = arr[i] - arr[i-1] / (xi - xi-1)(xi - xi-2) #for i = 2, 3, ...
 
-    return arr
+    # Initialize array that will be changed into a,b, and c in place
+    c0 = Ffun(x0)
+    c1 =  (Ffun(x1) - Ffun(x0)) / (x1 - x0)
+    c2 = (Ffun(x2) - c0 - c1*(x2 - x0)) / ((x2 - x0) *(x2 - x1))
+
+    a = c2
+    b = c1 - c2*x1 - c2*x0
+    c = c0 - c1*x0 + c2*x0*x1
+
+    return [a, b, c]
