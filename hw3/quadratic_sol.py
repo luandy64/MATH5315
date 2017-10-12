@@ -75,8 +75,7 @@ def quadratic_sol(Ffun, x, maxit, Srtol, Satol, Rrtol, Ratol, output):
         # Call utility functions to build a quadratic interpolating function
         # clist will be [a, b, c] for ax^2 + bx + c
         clist = newtoncoeff(Ffun, x0, x1, x2)
-        # Using a,b,c plug those into the quadratic question and return a
-        # root, and if the root is imaginary
+        # Using a,b,c plug those into the quadratic question and return a root 
         root = quad_equation(clist, x0)
 
         # Compute norms for convergence checking
@@ -119,8 +118,10 @@ def quad_equation(clist, x0):
     # Check if real roots can be found
     if ((pow(clist[1],2) - 4*clist[0]*clist[2]) >= 0):
         # Compute two root using the standard quadratic formula
-        posRoot = (-(clist[1]) + sqrt(pow(clist[1],2) - 4*clist[0]*clist[2])) / (2*clist[0])
-        negRoot = (-(clist[1]) - sqrt(pow(clist[1],2) - 4*clist[0]*clist[2])) / (2*clist[0])
+        posRoot = (-(clist[1]) + sqrt(pow(clist[1],2) 
+                   - 4*clist[0]*clist[2])) / (2*clist[0])
+        negRoot = (-(clist[1]) - sqrt(pow(clist[1],2) 
+                   - 4*clist[0]*clist[2])) / (2*clist[0])
 
         # Find the root closest to x0
         if (abs(posRoot - x0) < abs(negRoot - x0)):
@@ -146,13 +147,11 @@ def newtoncoeff(Ffun, x0, x1, x2):
                       polynomial
     """
     # calculate divided differences
-    # store in an array
-
-    # Initialize array that will be changed into a,b, and c in place
     c0 = Ffun(x0)
     c1 =  (Ffun(x1) - Ffun(x0)) / (x1 - x0)
     c2 = (Ffun(x2) - c0 - c1*(x2 - x0)) / ((x2 - x0) *(x2 - x1))
-
+    
+    # Compute coefficients a, b, c
     a = c2
     b = c1 - c2*x1 - c2*x0
     c = c0 - c1*x0 + c2*x0*x1
