@@ -111,7 +111,8 @@ for num in x0:
     Based on the output history, this method works just about the same as
     Newton's. It out performed Steffensen's method in one test. The one
     difference I saw in Newton's v. Quadratic was in the number of iterations
-    it took: Quadratic seemed to take plus or minus 1 iteration compared to Newton's. This could have been just a counting issue in my code.
+    it took: Quadratic seemed to take plus or minus 1 iteration compared to 
+    Newton's. This could have been just a counting issue in my code.
 
   (b)
     Just from writing this method, I could think of two reasons why this method
