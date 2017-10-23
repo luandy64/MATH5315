@@ -46,9 +46,6 @@ def cubic_spline_coefficients(t, y, alpha, beta):
     v = np.zeros(n)
     
     # Fill the values of the tridiagonal matrix
-    # hi = t(i+1) - ti
-    # di = 2*(hi-1 + hi)
-    # vi = (6/hi)*(y(i+1)-yi) - (6/h(i-1))*(yi-y(i-1))
     
     # Fill entry [0,0]
     tridiag[0,0] = 1.0
@@ -84,7 +81,19 @@ def cubic_spline_coefficients(t, y, alpha, beta):
     # Fill v[0]
     v[0] = alpha
     
-    # Fill v[i] where i = 1, n-2
+    # Fill v[i] where i = 1, n-1
+    for i in range(1,n):
+        # Compute value for h_i-1
+        hleft = t[i] - t[i-1]
+        
+        # Compute value for h_i
+        hright = t[i+1] - t[i]
+        
+        # Compute value for v_i
+        v[i] = (6/hright)*(y[(i+1)]-y[i]) - (6/hleft)*(y[i]-y[(i-1)])
+        
+    # Fill v[n]
+    v[n] = 6 * beta - 6*(y[n] - y[n-1]) / hleft
     
     
     
