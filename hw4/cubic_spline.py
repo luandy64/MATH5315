@@ -14,6 +14,7 @@ cubic_spline.py for Homework 4
 # Imports
 import numpy as np
 from scipy import linalg
+from math import *
 
 #################################################################################
 #                             Function Definitions                              #
@@ -95,7 +96,7 @@ def cubic_spline_coefficients(t, y, alpha, beta):
     # Fill v[n]
     v[n] = 6 * beta - 6*(y[n] - y[n-1]) / hleft
     
-    
+    z = linalg.solve(tridiag, v)
     
 def cubic_spline_evaluate(t, y, z, x):
     """
@@ -110,3 +111,38 @@ def cubic_spline_evaluate(t, y, z, x):
                x        The value to evaluate the interpolant at
     Output:    s        The value of the interpolant at x
     """
+    
+    # Get number of knots
+    n = len(t)
+    
+    # Find the left bound of the interval x is in
+    i = 0
+    
+    for j in range(n):
+        if (x < t[j]):
+            i = j - 1
+            break
+            
+    # Calculate parts needed by S(x)
+    hi = t[i+1] - t[i]
+    Ei = (y[i+1]/hi) - (z[i+1]*hi/6)
+    Fi = (y[i]/hi) - (z[i]*hi/6)
+    
+    s = (z[i]/(6*hi))*(pow((t[i+1] - x),3))
+    s = s + (z[i+1]/(6*hi))*(pow((x- t[i]),3))
+    s = s + Ei*(x-t[i]) + Fi*(t[i+1] - x)
+    
+    return s
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
