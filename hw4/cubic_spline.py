@@ -13,6 +13,7 @@ cubic_spline.py for Homework 4
 
 # Imports
 import numpy as np
+from scipy import linalg
 
 #################################################################################
 #                             Function Definitions                              #
@@ -32,6 +33,60 @@ def cubic_spline_coefficients(t, y, alpha, beta):
     Output:    z        A vector of the coefficients of the cubic spline 
                           interpolant
     """
+    # Get the size of vector t
+    n = len(t)
+    
+    # Create a zero matrix of size NxN
+    tridiag = np.zeros(n)
+    
+    # Create a zero vector of size N
+    z = np.zeros(n)
+    
+    # Create a zero vector of size N
+    v = np.zeros(n)
+    
+    # Fill the values of the tridiagonal matrix
+    # hi = t(i+1) - ti
+    # di = 2*(hi-1 + hi)
+    # vi = (6/hi)*(y(i+1)-yi) - (6/h(i-1))*(yi-y(i-1))
+    
+    # Fill entry [0,0]
+    tridiag[0,0] = 1.0
+    
+    # Fill entries [i,j] where i,j = 1,...,n-1 
+    for i in range(1,n):
+        # Compute value for h_i-1
+        hleft = t[i] - t[i-1]
+        
+        # Compute value for h_i
+        hright = t[i+1] - t[i]
+        
+        # Fill the entry to the left of the diagonal 
+        tridiag[i, (i-1)] = hleft
+        
+        # Fill the entry on the diagonal
+        tridiag[i,i] = 2*(hleft - hright)
+        
+        # Fill the entry to the right of the diagonal
+        tridiag[i, (i+1)] = hright
+    
+    # Calculate h(n-1) to use in the last row of tridiag
+    hleft = t[n-1] - t[n]
+    
+    # Fill entry [n-1,n-2]
+    tridiag[(n-1),(n-2)] = hleft
+    
+    # Fill entry [n-1,n-1]
+    tridiag[(n-1),(n-1)] = 2* hleft
+    
+    # Fill values of vector v
+    
+    # Fill v[0]
+    v[0] = alpha
+    
+    # Fill v[i] where i = 1, n-2
+    
+    
     
 def cubic_spline_evaluate(t, y, z, x):
     """
