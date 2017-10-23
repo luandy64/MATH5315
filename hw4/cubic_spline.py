@@ -17,6 +17,17 @@ cubic_spline.py for Homework 4
 #                             Function Definitions                              #
 #################################################################################
 def cubic_spline_coefficients(t, y, alpha, beta):
+    """
+    Usage: z = cubic_spline_coefficients(t, y, alpha, beta)
     
+    This function solves for and returns the coefficients of the cubic spline 
+    that interpolates the points (t,y) and satisfies the boundary conditions
+    S''(t0) = alpha and S'(tn) = beta
+    """
     
 def cubic_spline_evaluate(t, y, z, x):
+    """
+    Usage: s = cubic spline_evaluate(t, y, z, x)
+    
+    This function evaluates S(x), the cubic spline interpolant
+    """
