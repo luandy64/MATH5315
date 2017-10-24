@@ -118,6 +118,12 @@ plt.semilogy(xval, abs(f(xval) - s64), 'r-')
 plt.show()
 
 ################################################################################
-#                             Comments on results                              #
+#                                   Comments                                   #
 ################################################################################
-# 
+# The problem is the Lagrange interpolant uses a high order polynomial to make 
+# sure all of the nodes are interpolated. This results in more and more
+# oscilation the farther from the orgin you move. Thus the end points at the 
+# boundary are oscilating in the Lagrange; on the other hand, the cubic splines 
+# are piecewise defined on subintervals. However, they are at most degree 3, 
+# which is much less oscilatory than whatever the Lagrange is.
+
