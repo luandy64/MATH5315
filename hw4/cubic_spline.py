@@ -97,9 +97,10 @@ def cubic_spline_coefficients(t, y, alpha, beta):
     v[n-1] = (6 * beta) - (6*(y[n-1] - y[n-2]) / hleft)
     
     z = linalg.solve(tridiag, v)
-    
+    print(z)
     return z
-    
+# END def cubic_spline_coefficients
+
 def cubic_spline_evaluate(t, y, z, x):
     """
     Usage: s = cubic spline_evaluate(t, y, z, x)
@@ -120,9 +121,9 @@ def cubic_spline_evaluate(t, y, z, x):
     # Find the left bound of the interval x is in
     i = 0
     
-    for j in range(n):
+    for j in range(1,n):
         if (x <= t[j]):
-            i = j - 1
+            i = j-1
             break
             
     # Calculate parts needed by S(x)
@@ -135,16 +136,4 @@ def cubic_spline_evaluate(t, y, z, x):
     s = s + Ei*(x-t[i]) + Fi*(t[i+1] - x)
     
     return s
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+# END def cubic_spline_evaluate

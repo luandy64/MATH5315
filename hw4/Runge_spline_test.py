@@ -79,35 +79,52 @@ for x in xval:
 ################################################################################
 #                                 Plotting S4                                  #
 ################################################################################
-plt.plot(xval,s4,'r+', label='S(x)')
-plt.plot(xval, f(xval),'bx', label=r"$f(x)=\frac{1}{1+x^2}$")
+plt.plot(xval,s4,'b', label='S(x)')
+plt.plot(xval, f(xval),'r--', label=r"$f(x)=\frac{1}{1+x^2}$")
 plt.title('Cubic Spline Interpolant: n=4')
 plt.legend()
-plt.show()
+plt.draw()
+plt.figure()
 plt.title('Cubic Spline Interpolant Eror: n=4')
 plt.semilogy(xval, abs(f(xval) - s4), 'r-')
-plt.show()
+#plt.show()
+plt.draw()
 
 ################################################################################
 #                                 Plotting S16                                 #
 ################################################################################
-plt.plot(xval,s16,'r+', label='S(x)')
-plt.plot(xval, f(xval),'bx', label=r"$f(x)=\frac{1}{1+x^2}$")
+plt.figure()
+plt.plot(xval,s16,'b', label='S(x)')
+plt.plot(xval, f(xval),'r--', label=r"$f(x)=\frac{1}{1+x^2}$")
 plt.title('Cubic Spline Interpolant: n=16')
 plt.legend()
-plt.show()
+plt.draw()
+plt.figure()
 plt.title('Cubic Spline Interpolant Eror: n=16')
 plt.semilogy(xval, abs(f(xval) - s16), 'r-')
-plt.show()    
-
+#plt.show()    
+plt.draw()
 ################################################################################
 #                                 Plotting S64                                 #
 ################################################################################
-plt.plot(xval,s64,'r+', label='S(x)')
-plt.plot(xval, f(xval),'bx', label=r"$f(x)=\frac{1}{1+x^2}$")
+plt.figure()
+plt.plot(xval,s64,'b', label='S(x)')
+plt.plot(xval, f(xval),'r--', label=r"$f(x)=\frac{1}{1+x^2}$")
 plt.title('Cubic Spline Interpolant: n=64')
 plt.legend()
-plt.show()
+plt.draw()
+plt.figure()
 plt.title('Cubic Spline Interpolant Eror: n=64')
 plt.semilogy(xval, abs(f(xval) - s64), 'r-')
+plt.draw()
 plt.show()
+
+################################################################################
+#                                   Comments                                   #
+################################################################################
+# The problem is the Lagrange interpolant uses a high order polynomial to make 
+# sure all of the nodes are interpolated. This results in more and more
+# oscilation the farther from the orgin you move. Thus the end points at the 
+# boundary are oscilating in the Lagrange; on the other hand, the cubic splines 
+# are piecewise defined on subintervals. However, they are at most degree 3, 
+# which is much less oscilatory than whatever the Lagrange is.
