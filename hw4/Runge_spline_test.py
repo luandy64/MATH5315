@@ -75,11 +75,39 @@ for x in xval:
     s16[counter] = cubic_spline_evaluate(t16, y16, z16, x)
     s64[counter] = cubic_spline_evaluate(t64, y64, z64, x)
     counter = counter + 1
-    
 
-plt.plot(xval,s64)
+################################################################################
+#                                 Plotting S4                                  #
+################################################################################
+plt.plot(xval,s4,'r+', label='S(x)')
+plt.plot(xval, f(xval),'bx', label=r"$f(x)=\frac{1}{1+x^2}$")
+plt.title('Cubic Spline Interpolant: n=4')
+plt.legend()
 plt.show()
-plt.plot(xval, abs(f(xval) - s64))
+plt.title('Cubic Spline Interpolant Eror: n=4')
+plt.semilogy(xval, abs(f(xval) - s4), 'r-')
 plt.show()
-plt.plot(xval, f(xval))
+
+################################################################################
+#                                 Plotting S16                                 #
+################################################################################
+plt.plot(xval,s16,'r+', label='S(x)')
+plt.plot(xval, f(xval),'bx', label=r"$f(x)=\frac{1}{1+x^2}$")
+plt.title('Cubic Spline Interpolant: n=16')
+plt.legend()
+plt.show()
+plt.title('Cubic Spline Interpolant Eror: n=16')
+plt.semilogy(xval, abs(f(xval) - s16), 'r-')
+plt.show()    
+
+################################################################################
+#                                 Plotting S64                                 #
+################################################################################
+plt.plot(xval,s64,'r+', label='S(x)')
+plt.plot(xval, f(xval),'bx', label=r"$f(x)=\frac{1}{1+x^2}$")
+plt.title('Cubic Spline Interpolant: n=64')
+plt.legend()
+plt.show()
+plt.title('Cubic Spline Interpolant Eror: n=64')
+plt.semilogy(xval, abs(f(xval) - s64), 'r-')
 plt.show()
