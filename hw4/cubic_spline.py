@@ -63,7 +63,7 @@ def cubic_spline_coefficients(t, y, alpha, beta):
         tridiag[i, (i-1)] = hleft
         
         # Fill the entry on the diagonal
-        tridiag[i,i] = 2*(hleft - hright)
+        tridiag[i,i] = 2*(hleft + hright)
         
         # Fill the entry to the right of the diagonal
         tridiag[i, (i+1)] = hright
@@ -135,16 +135,3 @@ def cubic_spline_evaluate(t, y, z, x):
     s = s + Ei*(x-t[i]) + Fi*(t[i+1] - x)
     
     return s
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
