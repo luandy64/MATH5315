@@ -97,7 +97,7 @@ def cubic_spline_coefficients(t, y, alpha, beta):
     v[n-1] = (6 * beta) - (6*(y[n-1] - y[n-2]) / hleft)
     
     z = linalg.solve(tridiag, v)
-    print(z)
+
     return z
 # END def cubic_spline_coefficients
 
