@@ -16,9 +16,9 @@ import numpy as np
 from scipy import linalg
 from math import *
 
-#################################################################################
-#                             Function Definitions                              #
-#################################################################################
+################################################################################
+#                             Function Definitions                             #
+################################################################################
 def cubic_spline_coefficients(t, y, alpha, beta):
     """
     Usage: z = cubic_spline_coefficients(t, y, alpha, beta)
@@ -38,7 +38,7 @@ def cubic_spline_coefficients(t, y, alpha, beta):
     n = len(t)
     
     # Create a zero matrix of size NxN
-    tridiag = np.zeros(n)
+    tridiag = np.zeros((n,n))
     
     # Create a zero vector of size N
     z = np.zeros(n)
@@ -52,7 +52,7 @@ def cubic_spline_coefficients(t, y, alpha, beta):
     tridiag[0,0] = 1.0
     
     # Fill entries [i,j] where i,j = 1,...,n-1 
-    for i in range(1,n):
+    for i in range(1,n-1):
         # Compute value for h_i-1
         hleft = t[i] - t[i-1]
         
@@ -69,21 +69,21 @@ def cubic_spline_coefficients(t, y, alpha, beta):
         tridiag[i, (i+1)] = hright
     
     # Calculate h(n-1) to use in the last row of tridiag
-    hleft = t[n-1] - t[n]
+    hleft = t[n-1] - t[n-2]
     
     # Fill entry [n-1,n-2]
     tridiag[(n-1),(n-2)] = hleft
     
     # Fill entry [n-1,n-1]
-    tridiag[(n-1),(n-1)] = 2* hleft
-    
+    tridiag[(n-1),(n-1)] = 2 * hleft
+
     # Fill values of vector v
     
     # Fill v[0]
     v[0] = alpha
     
     # Fill v[i] where i = 1, n-1
-    for i in range(1,n):
+    for i in range(1,n-1):
         # Compute value for h_i-1
         hleft = t[i] - t[i-1]
         
@@ -93,10 +93,12 @@ def cubic_spline_coefficients(t, y, alpha, beta):
         # Compute value for v_i
         v[i] = (6/hright)*(y[(i+1)]-y[i]) - (6/hleft)*(y[i]-y[(i-1)])
         
-    # Fill v[n]
-    v[n] = 6 * beta - 6*(y[n] - y[n-1]) / hleft
+    # Fill v[n-1]
+    v[n-1] = (6 * beta) - (6*(y[n-1] - y[n-2]) / hleft)
     
     z = linalg.solve(tridiag, v)
+    
+    return z
     
 def cubic_spline_evaluate(t, y, z, x):
     """
@@ -119,13 +121,13 @@ def cubic_spline_evaluate(t, y, z, x):
     i = 0
     
     for j in range(n):
-        if (x < t[j]):
+        if (x <= t[j]):
             i = j - 1
             break
             
     # Calculate parts needed by S(x)
     hi = t[i+1] - t[i]
-    Ei = (y[i+1]/hi) - (z[i+1]*hi/6)
+    Ei = ((y[i+1]) / hi) - ((z[i+1]) * hi / 6)
     Fi = (y[i]/hi) - (z[i]*hi/6)
     
     s = (z[i]/(6*hi))*(pow((t[i+1] - x),3))
