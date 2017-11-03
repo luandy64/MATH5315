@@ -6,8 +6,8 @@ SMU Mathematics
 MATH 5315 Fall 2017
 
 prob4.py for Homework 2
-- This script was written by Daniel R. Reynolds, but modified by Andy Lu to
-  make Ffun() only need one parameter.
+- This script compares the performance of a standard fixed point iteration and
+  the Aitkens Extrapolation.
 """
 
 # Imports
